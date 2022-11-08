@@ -18,6 +18,8 @@ export const serverSchema = z.object({
   ),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
+  EMAIL_SERVER: z.string(),
+  EMAIL_FROM: z.string(),
 });
 
 /**
