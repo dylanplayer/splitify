@@ -1,23 +1,17 @@
 import { type NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react"
+
+import BrochureHero from "../components/BrochureHero/BrochureHero";
+import BrochureNavbar from "../components/BrochureNavbar/BrochureNavbar";
+import styles from "./index.module.css";
 
 const Home: NextPage = () => {
-  const { data: session } = useSession();
-
-  if (session) {
-    return (
-      <>
-        Signed in as {session?.user?.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
-    );
-  }
-
   return (
-    <>
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
-    </>
+    <div className={styles.page}>
+      <BrochureNavbar />
+      <main>
+        <BrochureHero />
+      </main>
+    </div>
   );
 };
 

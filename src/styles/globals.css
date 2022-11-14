@@ -1,16 +1,72 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
+* {
+  box-sizing: border-box;
+  margin: 0px;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+:root {
+  --primary-background-color: #27272A;
+  --secondary-background-color: #EEF2FF;
+
+  --primary-action-color: #6633CC;
+
+  --primary-font-color: #EEF2FF;
+  --secondary-font-color: #27272A;
+
+  --default-radius: 5px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --primary-background-color: #EEF2FF;
+    --secondary-background-color: #27272A;
+  
+    --primary-action-color: #6633CC;
+  
+    --primary-font-color: #27272A;
+    --secondary-font-color: #EEF2FF;
+  }
+}
+
+html, body {
+  padding: 0;
+  margin: 0;
+  
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  
+  width: 100vw;
+  min-height: 100vh;
+  
+  color: var(--primary-font-color);
+  background-color: var(--primary-background-color);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  overscroll-behavior-x: none;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
 a {
-  color: inherit;
+  color: var(--primary-action-color);
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
+button {
+  background-color: var(--primary-action-color);
+  color: var(--primary-font-color);
+  border: none;
+  border-radius: var(--default-radius);
+  padding: 0.5rem 1rem;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
 }
