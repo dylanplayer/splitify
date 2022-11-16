@@ -3,6 +3,7 @@ import Image from 'next/image';
 
 import { Images } from '../../../../constants';
 import styles from './DashboardPageNavbar.module.css';
+import { signOut } from 'next-auth/react';
 
 const DashboardPageNavbar = () => {
   return (
@@ -19,7 +20,10 @@ const DashboardPageNavbar = () => {
           </Link>
         </div>
         <div>
-          Link Link Link
+          <button
+            className={styles.button}
+            onClick={() => signOut({ callbackUrl: '/' })}
+          >Logout</button>
         </div>
       </div>
     </div>

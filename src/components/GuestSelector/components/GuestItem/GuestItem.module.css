@@ -1,0 +1,28 @@
+.container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.container:hover {
+  cursor: pointer;
+}
+
+.name {
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 500;
+
+  color: var(--secondary-font-color);
+}
+
+.phone {
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 500;
+
+  color: var(--secondary-font-color);
+}
