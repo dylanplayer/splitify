@@ -15,6 +15,7 @@ export const ItemCreator = ({items, setItems}: ItemCreatorProps) => {
     if (item.name.length > 0 && Number(item.price) > 0 && item.quantity > 0) {
       setItems([...items, {
         ...item,
+        id: items.length + 1,
         price: Number(item.price),
       }]);
       setItem({name: '', price: '', quantity: ''});

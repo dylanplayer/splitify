@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import { useState } from "react";
 
-import { DashboardPage, FeeCreator, FeeList, GuestList, GuestSelector, Input, ItemCreator, ItemList } from "../../../components";
+import { DashboardPage, FeeCreator, FeeList, GuestList, GuestSelector, Input, ItemAssigner, ItemCreator, ItemList } from "../../../components";
 
 const NewReceipt: NextPage = () => {
   const [pageNumber, setPageNumber] = useState(0);
@@ -22,6 +22,7 @@ const NewReceipt: NextPage = () => {
   ]);
   const [items, setItems] = useState<any[]>([]);
   const [fees, setFees] = useState<any[]>([]);
+  const [guestItems, setGuestItems] = useState<any[]>([]);
 
   if (pageNumber === 1) {
     return (
@@ -73,7 +74,7 @@ const NewReceipt: NextPage = () => {
         title='Add Fees'
         action={{
           text: 'Continue',
-          onClick: () => setPageNumber(3),
+          onClick: () => setPageNumber(4),
         }}
       >
         <FeeCreator fees={fees} setFees={setFees} />
@@ -82,6 +83,23 @@ const NewReceipt: NextPage = () => {
             <FeeList fees={fees} setFees={setFees} />
           )
         }
+      </DashboardPage>
+    );
+  } else if (pageNumber === 4) {
+    return (
+      <DashboardPage
+        title='Asign Items'
+        action={{
+          text: 'Continue',
+          onClick: () => setPageNumber(5),
+        }}
+      >
+        <ItemAssigner
+          items={items}
+          guests={guests}
+          guestItems={guestItems}
+          setGuestItems={setGuestItems}
+        />
       </DashboardPage>
     );
   }

@@ -9,3 +9,4 @@ export * from './ItemCreator';
 export * from './ItemList';
 export * from './FeeCreator';
 export * from './FeeList';
+export * from './ItemAssigner';
