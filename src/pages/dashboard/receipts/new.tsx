@@ -1,9 +1,28 @@
+import type { GetServerSideProps, InferGetServerSidePropsType} from "next";
 import { type NextPage } from "next";
+import { getSession } from "next-auth/react";
 import { useState } from "react";
 
 import { DashboardPage, FeeCreator, FeeList, GuestList, GuestSelector, Input, ItemAssigner, ItemCreator, ItemList, Review } from "../../../components";
 
-const NewReceipt: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {}
+  }
+}
+
+const NewReceipt: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [pageNumber, setPageNumber] = useState(0);
   const [name, setName] = useState("");
   const [date, setDate] = useState("");

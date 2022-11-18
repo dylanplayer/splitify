@@ -1,10 +1,29 @@
+import type { GetServerSideProps, InferGetServerSidePropsType} from 'next';
 import { type NextPage } from 'next';
+import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
 import { DashboardPage, ReceiptCard } from '../../components/';
 import styles from './index.module.css';
 
-const Dashboard: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {}
+  }
+}
+
+const Dashboard: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const receipts = [
     {
