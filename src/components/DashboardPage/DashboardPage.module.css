@@ -34,6 +34,41 @@
   gap: 1rem;
 }
 
+.header {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+
+  gap: 1rem;
+}
+
+.back {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  background-color: transparent;
+
+  border: 2px solid var(--secondary-font-color);
+  border-radius: var(--default-radius);
+
+  cursor: pointer;
+  transition: var(--default-transition);
+
+  padding: 5px;
+}
+
+.back:hover {
+  transform: scale(1.03);
+}
+
+.back:active {
+  transform: scale(0.97);
+}
+
 .title {
   margin-bottom: 0px;
 }

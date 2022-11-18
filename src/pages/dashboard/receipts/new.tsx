@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import { useState } from "react";
 
-import { DashboardPage, FeeCreator, FeeList, GuestList, GuestSelector, Input, ItemAssigner, ItemCreator, ItemList } from "../../../components";
+import { DashboardPage, FeeCreator, FeeList, GuestList, GuestSelector, Input, ItemAssigner, ItemCreator, ItemList, Review } from "../../../components";
 
 const NewReceipt: NextPage = () => {
   const [pageNumber, setPageNumber] = useState(0);
@@ -59,6 +59,7 @@ const NewReceipt: NextPage = () => {
           text: 'Continue',
           onClick: () => setPageNumber(3),
         }}
+        back={() => setPageNumber(1)}
       >
         <ItemCreator items={items} setItems={setItems} />
         {
@@ -76,6 +77,7 @@ const NewReceipt: NextPage = () => {
           text: 'Continue',
           onClick: () => setPageNumber(4),
         }}
+        back={() => setPageNumber(2)}
       >
         <FeeCreator fees={fees} setFees={setFees} />
         {
@@ -93,12 +95,31 @@ const NewReceipt: NextPage = () => {
           text: 'Continue',
           onClick: () => setPageNumber(5),
         }}
+        back={() => setPageNumber(3)}
       >
         <ItemAssigner
           items={items}
           guests={guests}
           guestItems={guestItems}
           setGuestItems={setGuestItems}
+        />
+      </DashboardPage>
+    );
+  } else if (pageNumber === 5) {
+    return (
+      <DashboardPage
+        title='Review'
+        action={{
+          text: 'Finish',
+          onClick: () => setPageNumber(5),
+        }}
+        back={() => setPageNumber(4)}
+      >
+        <Review
+          items={items}
+          guests={guests}
+          guestItems={guestItems}
+          fees={fees}
         />
       </DashboardPage>
     );
