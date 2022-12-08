@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react';
 import { GuestItem } from './components';
 import styles from './GuestList.module.css';
 
@@ -9,6 +10,8 @@ export interface GuestListProps {
 }
 
 export const GuestList = ({guests, friends, setGuests, setFriends}: GuestListProps) => {
+  const session = useSession();
+  
   const removeGuest = (guest: any) => {
     setGuests(guests.filter((g) => g.id !== guest.id));
     setFriends([...friends, guest]);
@@ -17,9 +20,15 @@ export const GuestList = ({guests, friends, setGuests, setFriends}: GuestListPro
   return (
     <div className={styles.container}>
       {
-        guests.map((guest) => (
-          <GuestItem guest={guest} key={`guest-${guest.id}`} removeGuest={removeGuest}/>
-        ))
+        guests.map((guest) => {
+          if (session.data?.user?.id !== guest.userId) {
+            return (
+              <GuestItem guest={guest} key={`guest-${guest.id}`} removeGuest={removeGuest}/>
+            );
+          } else {
+            return <></>;
+          }
+        })
       }
     </div>
   );

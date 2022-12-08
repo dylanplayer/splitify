@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 import { DashboardPage, FeeCreator, FeeList, GuestList, GuestSelector, Input, ItemAssigner, ItemCreator, ItemList, Loading, Review } from "../../../components";
 import { prisma } from './../../../server/db/client';
-import { useGetFollowing } from "../../../hooks/useGetFollowing";
+import { useGetFollowing, useGetCurrentGuest } from "../../../hooks";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -38,6 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const NewReceipt: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const {following, loading: followingLoading} = useGetFollowing();
+  const {guest: currentGuest, loading: currentGuestLoading} = useGetCurrentGuest();
 
   const router = useRouter();
   const [pageNumber, setPageNumber] = useState(0);
@@ -90,9 +91,13 @@ const NewReceipt: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSi
     if (following) {
       setFriends(following);
     }
-  }, [following]);
 
-  if (followingLoading || loading) {
+    if (currentGuest) {
+      setGuests([currentGuest]);
+    }
+  }, [following, currentGuest]);
+
+  if (currentGuestLoading || followingLoading || loading) {
     return (
       <DashboardPage>
         <Loading />
@@ -117,7 +122,7 @@ const NewReceipt: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSi
           setFriends={setFriends}
         />
         {
-          guests.length > 0 && (
+          (guests.length > 1) && (
             <GuestList
               guests={guests}
               friends={friends}
