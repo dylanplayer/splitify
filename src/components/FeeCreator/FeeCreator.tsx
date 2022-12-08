@@ -1,11 +1,12 @@
+import type { ReceiptFee } from '@prisma/client';
 import { useState } from 'react';
 import CurrencyInput from 'react-currency-input-field';
 
 import styles from './FeeCreator.module.css';
 
 export interface FeeCreatorProps {
-  fees: any[];
-  setFees: (fees: any[]) => void;
+  fees: ReceiptFee[];
+  setFees: (fees: ReceiptFee[]) => void;
 }
 
 export const FeeCreator = ({fees, setFees}: FeeCreatorProps) => {

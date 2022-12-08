@@ -13,7 +13,6 @@ model Example {
   updatedAt DateTime @updatedAt
 }
 
-// Necessary for Next auth
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -42,12 +41,15 @@ model Session {
 
 model User {
   id            String    @id @default(cuid())
-  name          String?
+  name          String
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+
+  guest         Guest?
   accounts      Account[]
   sessions      Session[]
+  receipts      Receipt[]
 }
 
 model VerificationToken {
@@ -56,4 +58,73 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Guest {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  phone     String
+  userId    String? @unique
+
+  receipts         Receipt[]
+  receiptGuestItem ReceiptGuestItem[]
+  followers        Guest[] @relation("GuestFollows")
+  following        Guest[] @relation("GuestFollows")
+  user             User?   @relation(fields: [userId], references: [id])
+
+  @@unique([phone])
+}
+
+model Receipt {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  date      DateTime
+  userId    String
+
+  guests      Guest[]
+  items       ReceiptItem[]
+  fees        ReceiptFee[]
+  guestItems  ReceiptGuestItem[]
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ReceiptItem {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  price     Float
+  qty       Int
+  receiptId String
+
+  receipt          Receipt            @relation(fields: [receiptId], references: [id])
+  ReceiptGuestItem ReceiptGuestItem[]
+}
+
+model ReceiptFee {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  price     Float
+  receiptId String
+
+  receipt Receipt @relation(fields: [receiptId], references: [id])
+}
+
+model ReceiptGuestItem {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  receiptId String
+  guestId   String
+  itemId    String
+
+  receipt Receipt     @relation(fields: [receiptId], references: [id])
+  guest   Guest       @relation(fields: [guestId], references: [id])
+  item    ReceiptItem @relation(fields: [itemId], references: [id])
 }

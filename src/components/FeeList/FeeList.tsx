@@ -1,8 +1,9 @@
+import type { ReceiptFee } from '@prisma/client';
 import styles from './FeeList.module.css';
 
 export interface FeeListProps {
-  fees: any[];
-  setFees: (fees: any[]) => void;
+  fees: ReceiptFee[];
+  setFees: (fees: ReceiptFee[]) => void;
 }
 
 export const FeeList = ({fees, setFees}: FeeListProps) => {

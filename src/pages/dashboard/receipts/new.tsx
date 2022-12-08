@@ -1,17 +1,31 @@
-import type { GetServerSideProps, InferGetServerSidePropsType} from "next";
-import { type NextPage } from "next";
+import type { Guest, Receipt, ReceiptFee, ReceiptGuestItem, ReceiptItem } from "@prisma/client";
+import type { GetServerSideProps, InferGetServerSidePropsType, NextPage} from "next";
 import { getSession } from "next-auth/react";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-import { DashboardPage, FeeCreator, FeeList, GuestList, GuestSelector, Input, ItemAssigner, ItemCreator, ItemList, Review } from "../../../components";
+import { DashboardPage, FeeCreator, FeeList, GuestList, GuestSelector, Input, ItemAssigner, ItemCreator, ItemList, Loading, Review } from "../../../components";
+import { prisma } from './../../../server/db/client';
+import { useGetFollowing } from "../../../hooks/useGetFollowing";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
 
-  if (!session) {
+  if (!session?.user) {
     return {
       redirect: {
         destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  const guest = await prisma.guest.findUnique({where: {userId: session.user.id}});
+
+  if (!guest) {
+    return {
+      redirect: {
+        destination: '/dashboard/setup',
         permanent: false,
       },
     }
@@ -23,25 +37,68 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 const NewReceipt: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const {following, loading: followingLoading} = useGetFollowing();
+
+  const router = useRouter();
   const [pageNumber, setPageNumber] = useState(0);
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
-  const [guests, setGuests] = useState<any[]>([]);
-  const [friends, setFriends] = useState<any[]>([
-    {
-      id: '1',
-      name: 'John Doe',
-      phone: '234567890',
-    },
-    {
-      id: '2',
-      name: 'Jane Doe',
-      phone: '234567890',
-    },
-  ]);
-  const [items, setItems] = useState<any[]>([]);
-  const [fees, setFees] = useState<any[]>([]);
-  const [guestItems, setGuestItems] = useState<any[]>([]);
+  const [guests, setGuests] = useState<Guest[]>([]);
+  const [friends, setFriends] = useState<Guest[]>([]);
+  const [items, setItems] = useState<ReceiptItem[]>([]);
+  const [fees, setFees] = useState<ReceiptFee[]>([]);
+  const [guestItems, setGuestItems] = useState<ReceiptGuestItem[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/receipts/new', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          guests,
+          items,
+          fees,
+          guestItems,
+          date: new Date(date),
+        }),
+      });
+
+      const receipt: Receipt = await response.json();
+      setLoading(false);
+      router.push(`/dashboard/receipts/${receipt.id}`);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+  }
+
+  const reset = () => {
+    setName("");
+    setDate("");
+    setGuests([]);
+    setItems([]);
+    setFees([]);
+    setGuestItems([]);
+  }
+
+  useEffect(() => {
+    if (following) {
+      setFriends(following);
+    }
+  }, [following]);
+
+  if (followingLoading || loading) {
+    return (
+      <DashboardPage>
+        <Loading />
+      </DashboardPage>
+    );
+  }
 
   if (pageNumber === 1) {
     return (
@@ -51,6 +108,7 @@ const NewReceipt: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSi
           text: 'Continue',
           onClick: () => {guests.length > 0 ? setPageNumber(2) : null},
         }}
+        back={() => setPageNumber(0)}
       >
         <GuestSelector
           friends={friends}
@@ -130,7 +188,7 @@ const NewReceipt: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSi
         title='Review'
         action={{
           text: 'Finish',
-          onClick: () => setPageNumber(5),
+          onClick: () => handleSubmit(),
         }}
         back={() => setPageNumber(4)}
       >
@@ -150,6 +208,10 @@ const NewReceipt: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSi
       action={{
         text: 'Continue',
         onClick: () => setPageNumber(1),
+      }}
+      back={() => {
+        reset();
+        router.push('/dashboard');
       }}
     >
       <Input 

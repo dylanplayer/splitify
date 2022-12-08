@@ -14,7 +14,7 @@ export const ItemAssigner = ({items, guests, guestItems, setGuestItems}: ItemAss
 
   const getQtyForItem = (item: any) => {
     const count = guestItems.filter((guestItem) => guestItem.itemId === item.id).length;
-    return item.quantity / count;
+    return item.qty / count;
   }
 
   if (showSelectItemMenu) {

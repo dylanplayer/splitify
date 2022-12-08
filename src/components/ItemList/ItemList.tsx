@@ -23,8 +23,8 @@ export const ItemList = ({items, setItems}: ItemListProps) => {
           <div>
             <h3 className={styles.name}>{item.name}</h3>
             {
-              item.quantity > 1 && (
-                <p className={styles.quantity}>x{item.quantity}</p>
+              item.qty > 1 && (
+                <p className={styles.quantity}>x{item.qty}</p>
               )
             }
           </div>

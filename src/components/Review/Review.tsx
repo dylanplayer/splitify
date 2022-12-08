@@ -8,11 +8,11 @@ export interface ReviewProps {
 }
 
 export const Review = ({items, guests, guestItems, fees}: ReviewProps) => {
-  const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0)
+  const subtotal = items.reduce((acc, item) => acc + (item.price * item.qty), 0)
 
   const getQtyForItem = (item: any) => {
     const count = guestItems.filter((guestItem) => guestItem.itemId === item.id).length;
-    return item.quantity / count;
+    return item.qty / count;
   }
 
   const formatPrice = (price: number) => {
@@ -36,25 +36,25 @@ export const Review = ({items, guests, guestItems, fees}: ReviewProps) => {
           const guestTotal = guestSubtotal + guestFeesTotal;
 
           return (
-            <div className={styles.guest} key={index}>
+            <div className={styles.guest} key={`guest-section-${index}`}>
               <div className={styles.guestHeader}>
                 <h2 className={styles.guestName}>{guest.name}</h2>
               </div>
               <div className={styles.guestLineItems}>
                 {
                   guestsItems.map((item, index) => {
-                    const quantity = getQtyForItem(item);
-                    const price = item.price * quantity;
+                    const qty = getQtyForItem(item);
+                    const price = item.price * qty;
 
                     return (
-                      <div className={styles.guestLineItem} key={index}>
+                      <div className={styles.guestLineItem} key={`guest-line-item-item-${index}`}>
                         <h3 className={styles.guestLineItemName}>{item.name}</h3>
                         <p className={styles.guestLineItemPrice}>{formatPrice(price)}</p>
                       </div>
                     );
                   })
                 }
-                <div className={styles.guestLineItem} key={index}>
+                <div className={styles.guestLineItem} key={`guest-line-item-subtotal-${index}`}>
                   <h3 className={styles.guestLineItemName}>Subtotal</h3>
                   <p className={styles.guestLineItemPrice}>{formatPrice(guestSubtotal)}</p>
                 </div>
@@ -63,14 +63,14 @@ export const Review = ({items, guests, guestItems, fees}: ReviewProps) => {
                     const feeAmount = (fee.price / subtotal) * guestSubtotal;
 
                     return (
-                      <div className={styles.guestLineItem} key={index}>
+                      <div className={styles.guestLineItem} key={`guest-line-item-fee-${index}`}>
                         <h3 className={styles.guestLineItemName}>{fee.name}</h3>
                         <p className={styles.guestLineItemPrice}>{formatPrice(feeAmount)}</p>
                       </div>
                     );
                   })
                 }
-                <div className={styles.guestLineItem} key={index}>
+                <div className={styles.guestLineItem} key={`guest-line-item-total-${index}`}>
                   <h3 className={styles.guestLineItemName}>Total</h3>
                   <p className={styles.guestLineItemPrice}>{formatPrice(guestTotal)}</p>
                 </div>

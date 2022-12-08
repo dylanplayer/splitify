@@ -1,24 +1,25 @@
+import type { ReceiptItem } from '@prisma/client';
 import { useState } from 'react';
 import CurrencyInput from 'react-currency-input-field';
 
 import styles from './ItemCreator.module.css';
 
 export interface ItemCreatorProps {
-  items: any[];
-  setItems: (items: any[]) => void;
+  items: ReceiptItem[];
+  setItems: (items: ReceiptItem[]) => void;
 }
 
 export const ItemCreator = ({items, setItems}: ItemCreatorProps) => {
-  const [item, setItem] = useState<any>({name: '', price: '', quantity: ''});
+  const [item, setItem] = useState<any>({name: '', price: '', qty: ''});
   
   const handleAddItem = () => {
-    if (item.name.length > 0 && Number(item.price) > 0 && item.quantity > 0) {
+    if (item.name.length > 0 && Number(item.price) > 0 && item.qty > 0) {
       setItems([...items, {
         ...item,
         id: items.length + 1,
         price: Number(item.price),
       }]);
-      setItem({name: '', price: '', quantity: ''});
+      setItem({name: '', price: '', qty: ''});
     }
   }
 
@@ -46,8 +47,8 @@ export const ItemCreator = ({items, setItems}: ItemCreatorProps) => {
         allowDecimals={false}
         allowNegativeValue={false}
         placeholder='Quantity'
-        value={item.quantity}
-        onValueChange={(value) => setItem({...item, quantity: Number(value) || undefined})}
+        value={item.qty}
+        onValueChange={(value) => setItem({...item, qty: Number(value) || undefined})}
       />
       <button
         className={styles.button}

@@ -3,16 +3,29 @@ import { type NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
-import { DashboardPage, ReceiptCard } from '../../components/';
+import { DashboardPage, Loading, ReceiptCard } from '../../components/';
+import { useGetReceipts } from '../../hooks';
+import { prisma } from '../../server/db/client';
 import styles from './index.module.css';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
 
-  if (!session) {
+  if (!session?.user) {
     return {
       redirect: {
         destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  const guest = await prisma.guest.findUnique({where: {userId: session.user.id}});
+
+  if (!guest) {
+    return {
+      redirect: {
+        destination: '/dashboard/setup',
         permanent: false,
       },
     }
@@ -25,23 +38,38 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const Dashboard: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
-  const receipts = [
-    {
-      id: '1',
-      name: 'Receipt 1',
-      date: '01/01/2021',
-    },
-    {
-      id: '2',
-      name: 'Receipt 1',
-      date: '01/01/2021',
-    },
-    {
-      id: '3',
-      name: 'Receipt 1',
-      date: '01/01/2021',
-    },
-  ];
+  const {receipts, loading, error} = useGetReceipts();
+
+  if (loading) {
+    return (
+      <DashboardPage
+        title='Receipts'
+        action={{
+          text: 'Split a receipt',
+          onClick: () => router.push('/dashboard/receipts/new'),
+        }}
+      >
+        <Loading />
+      </DashboardPage>
+    );
+  }
+
+  if (error) {
+    return (
+      <DashboardPage
+        title='Receipts'
+        action={{
+          text: 'Split a receipt',
+          onClick: () => router.push('/dashboard/receipts/new'),
+        }}
+      >
+        <div className={styles.error}>
+          <p>There was an error loading your receipts.</p>
+          <p>Please try again later.</p>
+        </div>
+      </DashboardPage>
+    );
+  }
 
   return (
     <DashboardPage
@@ -52,7 +80,7 @@ const Dashboard: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSid
       }}
     >
     {
-      receipts.length === 0 ? (
+      !receipts || receipts.length === 0 ? (
         <p>You have no receipts.</p>
       ) : (
         <div className={styles.receipts}>
@@ -62,7 +90,7 @@ const Dashboard: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSid
                 key={`receipt-${receipt.id}`}
                 id={receipt.id}
                 name={receipt.name}
-                date={receipt.date}
+                date={new Date(receipt.date).toLocaleDateString()}
               />
             ))
           }
@@ -70,7 +98,7 @@ const Dashboard: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSid
       )
     }
     </DashboardPage>
-  )
+  );
 }
 
 export default Dashboard;

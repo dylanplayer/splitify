@@ -11,3 +11,4 @@ export * from './FeeCreator';
 export * from './FeeList';
 export * from './ItemAssigner';
 export * from './Review';
+export * from './Loading';
