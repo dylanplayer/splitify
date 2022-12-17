@@ -21,7 +21,6 @@ const receipt = async (req: NextApiRequest, res: NextApiResponse) => {
         guestItems: true,
       },
     });
-    console.log(`receipt`, receipt);
 
     if (receipt) {
       res.send(receipt);

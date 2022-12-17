@@ -6,8 +6,6 @@
   align-items: center;
   gap: 5px;
 
-  padding: 1rem;
-
   border: 2px solid var(--secondary-font-color);
   border-radius: var(--default-radius);
 }
