@@ -19,6 +19,9 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
+  cursor: pointer;
+  transition: var(--default-transition);
 }
 
 .fee:not(:last-child) {
@@ -26,7 +29,19 @@
 }
 
 .fee:hover {
-  cursor: pointer;
+  background-color: var(--danger-color);
+}
+
+.fee:last-child {
+  border-radius: 0 0 calc(var(--default-radius) / 2) calc(var(--default-radius) / 2);
+}
+
+.fee:first-child {
+  border-radius: calc(var(--default-radius) / 2) calc(var(--default-radius) / 2) 0 0;
+}
+
+.fee:only-child {
+  border-radius: calc(var(--default-radius) / 2) calc(var(--default-radius) / 2) calc(var(--default-radius) / 2) calc(var(--default-radius) / 2);
 }
 
 .name, .price{

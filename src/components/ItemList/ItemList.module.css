@@ -19,6 +19,21 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
+  cursor: pointer;
+  transition: var(--default-transition);
+}
+
+.item:last-child {
+  border-radius: 0 0 calc(var(--default-radius) / 2) calc(var(--default-radius) / 2);
+}
+
+.item:first-child {
+  border-radius: calc(var(--default-radius) / 2) calc(var(--default-radius) / 2) 0 0;
+}
+
+.item:only-child {
+  border-radius: calc(var(--default-radius) / 2) calc(var(--default-radius) / 2) calc(var(--default-radius) / 2) calc(var(--default-radius) / 2);
 }
 
 .item:not(:last-child) {
@@ -26,7 +41,7 @@
 }
 
 .item:hover {
-  cursor: pointer;
+  background-color: var(--danger-color);
 }
 
 .item > div {
