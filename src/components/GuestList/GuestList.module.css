@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
 
   border: 2px solid var(--secondary-font-color);
   border-radius: var(--default-radius);

@@ -25,9 +25,12 @@
   border-radius: calc(var(--default-radius) / 2) calc(var(--default-radius) / 2) 0 0;
 }
 
-
 .container:only-child {
   border-radius: calc(var(--default-radius) / 2) calc(var(--default-radius) / 2) calc(var(--default-radius) / 2) calc(var(--default-radius) / 2);
+}
+
+.container:not(:last-child) {
+  border-bottom: 1px solid var(--primary-background-color);
 }
 
 .name {
