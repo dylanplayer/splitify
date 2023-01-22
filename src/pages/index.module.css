@@ -2,11 +2,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  min-height: 50vh;
-  width: 100%;
-  max-width: 450px;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  width: 100vw;
   background-color: var(--primary-background-color);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+  max-width: 650px;
 }

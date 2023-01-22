@@ -13,8 +13,8 @@ const BrochureNavbar = () => {
           <Image
             src={Images.logo.path}
             alt={Images.logo.alt}
-            width={48 * (Images.logo.width / Images.logo.height)}
-            height={48}
+            width={52 * (Images.logo.width / Images.logo.height)}
+            height={52}
           />
         </Link>
       </div>
