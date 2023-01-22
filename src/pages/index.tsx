@@ -24,8 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Home: NextPage = ({}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <div className={styles.page}>
-      <BrochureNavbar />
-      <main>
+      <main className={styles.main}>
         <BrochureHero />
       </main>
     </div>
